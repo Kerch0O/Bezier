@@ -1,2 +1,2 @@
 # Bezier
- Bezier Curve implementation and Illustration
+ Bezier Curve Implementation and Illustration

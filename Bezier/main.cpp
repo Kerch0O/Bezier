@@ -80,6 +80,22 @@ int main() {
 	bool type2traceD = false;
 	bool type3traceD = false;
 
+	//Text
+	//Font
+	sf::Font calibri;
+	calibri.loadFromFile("calibri.ttf");
+
+	sf::Text fps;
+	fps.setFont(calibri);
+	fps.setCharacterSize(25);//Fps counter
+	fps.setFillColor(sf::Color(150, 0, 0));
+	
+	sf::Text TE;
+	TE.setFont(calibri);
+	TE.setCharacterSize(25);//Time elapsed
+	TE.setPosition(sf::Vector2f(0.0f, 25.0f));
+	TE.setFillColor(sf::Color(150, 0, 0));
+
 
 
 	while (window.isOpen()) {
@@ -107,7 +123,6 @@ int main() {
 
 					stepping = !stepping;
 					totalTime = 0.0f;
-					std::cout << "Stepping flipped" << std::endl;
 				}
 				else if (evnt.text.unicode == '1') {
 					type1traceD = !type1traceD;
@@ -132,9 +147,12 @@ int main() {
 		totalTime += deltaTime * stepping; //if stepping is true then update totalTime(unbranched)
 		stepping *= totalTime < 1.0f; //if totaltime has exceeded one then stop stepping
 
+		fps.setString("FPS: " + std::to_string(1.0f / deltaTime));
+		TE.setString("Time Elapsed: " + std::to_string(totalTime * movementTime));
+
 		if (clicking) {
 		
-			if (currPressed != -1) {
+			if (currPressed != -1 && points[currPressed].type == 0) {
 				points[currPressed].rep.setPosition(mousePos);
 				for (auto &x: links) {
 					if (points[x.p1].type == 0) {
@@ -145,7 +163,6 @@ int main() {
 		}
 
 		if (stepping) {
-			std::cout << "Stepping" << std::endl;
 			for (auto& x : links) {
 				x.update(totalTime, points);
 			}
@@ -167,6 +184,8 @@ int main() {
 			}
 		}
 
+		window.draw(fps);
+		window.draw(TE);
 
 		window.display();
 	}
